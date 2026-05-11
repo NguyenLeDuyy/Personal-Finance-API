@@ -1,0 +1,18 @@
+$kind: http-request
+url: http://localhost:8080/api/auth/register
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "not-an-email",
+      "password": "123",
+      "fullName": ""
+    }
+scripts:
+  - type: afterResponse
+    code: pm.test('Status is 400 for validation error', function() { pm.response.to.have.status(400); });
+    language: text/javascript
+order: 3000

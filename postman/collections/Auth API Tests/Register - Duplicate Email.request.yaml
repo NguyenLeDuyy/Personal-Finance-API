@@ -1,0 +1,18 @@
+$kind: http-request
+url: http://localhost:8080/api/auth/register
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "duy@test.com",
+      "password": "123456",
+      "fullName": "Nguyen Le Duy"
+    }
+scripts:
+  - type: afterResponse
+    code: pm.test('Status is 400 or 409 for duplicate email', function() { pm.expect(pm.response.code).to.be.oneOf([400, 409]); });
+    language: text/javascript
+order: 2000
