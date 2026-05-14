@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.personalfinance.personal_finance_api.dto.request.LoginRequest;
 import com.personalfinance.personal_finance_api.dto.request.RegisterRequest;
+import com.personalfinance.personal_finance_api.dto.response.LoginResponse;
 import com.personalfinance.personal_finance_api.dto.response.UserResponse;
 import com.personalfinance.personal_finance_api.service.UserService;
 
@@ -24,5 +26,11 @@ public class UserController {
     public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request) {
         UserResponse createdUser = userService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        LoginResponse loginedUser = userService.login(request);
+        return ResponseEntity.ok(loginedUser);
     }
 }
