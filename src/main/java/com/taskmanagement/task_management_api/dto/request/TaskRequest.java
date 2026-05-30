@@ -2,6 +2,9 @@ package com.taskmanagement.task_management_api.dto.request;
 
 import java.time.LocalDate;
 
+import com.taskmanagement.task_management_api.entity.enums.TaskPriority;
+import com.taskmanagement.task_management_api.entity.enums.TaskStatus;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -16,14 +19,11 @@ public class TaskRequest {
 
     private String description;
 
-    @NotBlank(message = "Status is required")
-    private String status;
+    @NotNull(message = "Status is required")
+    private TaskStatus status;
 
-    @NotBlank(message = "Priority is required")
-    private String priority;
+    @NotNull(message = "Priority is required")
+    private TaskPriority priority;
 
     private LocalDate dueDate;
-
-    @NotNull(message = "User Id is required")
-    private Long userId;
 }

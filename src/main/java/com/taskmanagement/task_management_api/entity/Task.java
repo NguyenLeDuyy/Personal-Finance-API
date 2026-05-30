@@ -3,8 +3,13 @@ package com.taskmanagement.task_management_api.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.taskmanagement.task_management_api.entity.enums.TaskPriority;
+import com.taskmanagement.task_management_api.entity.enums.TaskStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,11 +37,13 @@ public class Task {
     @Column
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private TaskStatus status;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String priority;
+    private TaskPriority priority;
 
     @Column(nullable = false)
     private LocalDate dueDate;
