@@ -12,4 +12,6 @@ public interface TaskService {
     public TaskResponse updateTask(Long id, TaskRequest request);
 
     public void deleteTask(Long id);
+
+    public TaskResponse getTaskById(Long id);
 }

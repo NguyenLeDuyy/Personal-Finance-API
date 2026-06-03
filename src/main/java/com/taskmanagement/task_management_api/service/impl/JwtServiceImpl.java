@@ -1,12 +1,16 @@
 package com.taskmanagement.task_management_api.service.impl;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.taskmanagement.task_management_api.dto.RefreshTokenDetails;
 import com.taskmanagement.task_management_api.service.JwtService;
 
 import io.jsonwebtoken.Claims;
@@ -42,14 +46,17 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateRefreshToken(String email) {
-        String jwt = Jwts.builder()
+    public RefreshTokenDetails generateRefreshToken(String email) {
+        String jti = UUID.randomUUID().toString();
+        LocalDateTime expiryDate = LocalDateTime.now().plusSeconds(refreshExpiration / 1000);
+        String token = Jwts.builder()
+                .id(jti)
                 .subject(email)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + refreshExpiration))
                 .signWith(getSigningKey())
                 .compact();
-        return jwt;
+        return new RefreshTokenDetails(jti, token, expiryDate);
     }
 
     @Override
@@ -70,6 +77,16 @@ public class JwtServiceImpl implements JwtService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public String extractJti(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.getId();
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.taskmanagement.task_management_api.dto.request.LoginRequest;
+import com.taskmanagement.task_management_api.dto.request.RefreshTokenRequest;
 import com.taskmanagement.task_management_api.dto.request.RegisterRequest;
 import com.taskmanagement.task_management_api.dto.response.LoginResponse;
 import com.taskmanagement.task_management_api.dto.response.UserResponse;
@@ -33,4 +34,17 @@ public class UserController {
         LoginResponse loginedUser = userService.login(request);
         return ResponseEntity.ok(loginedUser);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest request) {
+        LoginResponse response = userService.refreshToken(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshToken) {
+        userService.logout(refreshToken.getRefreshToken());
+        return ResponseEntity.ok("Đăng xuất thành công!");
+    }
+
 }

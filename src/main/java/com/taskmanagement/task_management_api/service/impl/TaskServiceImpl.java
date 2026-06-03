@@ -133,4 +133,22 @@ public class TaskServiceImpl implements TaskService {
                 .build();
     }
 
+    @Override
+    public TaskResponse getTaskById(Long id) {
+        String loggedInUserEmail = SecurityContextHolder
+                .getContext().getAuthentication().getName();
+
+        User user = userRepository.findByEmail(loggedInUserEmail)
+                .orElseThrow(() -> new BadRequestException("User không tồn tại hoặc phiên bản đăng nhập hết hạn!"));
+
+        Task currentTask = taskRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Task không tồn tại!"));
+
+        if (!user.getId().equals(currentTask.getUser().getId())) {
+            throw new BadRequestException("Bạn không có quyền truy xuất task này!");
+        }
+
+        return mapToResponse(currentTask);
+    }
+
 }
